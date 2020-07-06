@@ -2,7 +2,7 @@
 .stack 100h
 .data
 
-array db 1,3,8,0,2,5,9,4,6,7	;arreglo desordenado de 10 elementos
+array db 11,83,58,40,10,33,78,47,69,66	;arreglo desordenado de 10 elementos
 espacio db " ", "$"	; espacio para la impresion de cada elemento
 fin db 10, 13, "$"	; cambio de linea después de la impresion del ultimo elemento
 
@@ -38,23 +38,27 @@ fin db 10, 13, "$"	; cambio de linea después de la impresion del ultimo element
 		iter:	;Aquí llega el salto en caso bx y cx sean iguales
 	loop loop1	;En esta linea de código, se itera y asimismo se decrementa en 1 el valor de cx y cuando sea 0 sale del bucle
 	
-	;Inicializamos cx y bx para la impresión del arreglo:
+	;Inicializamos cx y si para la impresión del arreglo:
 	mov cx, 10
-	mov bx, 0
-	
+	mov si, 0
 	
 	impresion:	;Se imprime el arreglo
-	;Se apunta al arreglo
-	mov si, offset array
-	;Se guarda el valor en la posición bx
-	mov al, [si + bx]
-	;Se incrementa el valor de bx para recorrer el arreglo
-	inc bx
+	;Se apunta al arreglo y se guarda el valor en la posición si
+	mov dl, array[si]
+	;Se incrementa el valor de si para recorrer el arreglo
+	inc si
 	
-	;Se imprime como caracter
-	add al, 48
+	;Se imprime el numero que en este caso es de 2 dígitos:	
+	mov al, dl
+	aam
+	mov bl, al
+	mov dl, ah
+	add dl, 48
 	mov ah, 2
-	mov dl, al
+	int 21h
+	mov dl, bl
+	add dl, 48
+	mov ah, 2
 	int 21h
 
 	;Se agrega un espacio entre cada numero
